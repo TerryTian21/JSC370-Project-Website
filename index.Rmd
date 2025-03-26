@@ -1,10 +1,75 @@
 ---
 title: "JSC370 Final Project"
-author: "Your Name"
+author: "Terry Tian"
 output: 
     html_document:
         toc: TRUE
         toc_float: TRUE
 ---
 
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning = FALSE, message=FALSE)
+```
+
+
 This is my JSC370 Final Project website.
+
+```{r echo=FALSE}
+
+source("process_starbucks_data.R")
+```
+
+
+```{r p1_scatter}
+
+p1_scatter <- sb_nutr %>% 
+  plot_ly(x = ~Calories, y = ~ `Carb. (g)`, type = "scatter", mode = 'markers', color = ~Category)
+
+```
+
+```{r p2-scatter}
+
+
+p2_scatter <- sb_nutr %>% 
+  unnest_tokens(word, Item, token="words") %>% 
+  filter(word %in% topwords$word) %>% 
+  plot_ly(
+    x = ~Calories,
+    y = ~ `Carb. (g)`, 
+    z = ~ `Protein (g)`,
+    type = "scatter3d", 
+    mode = 'markers', 
+    color = ~word,
+    marker = list(size = 5)
+
+  ) %>% 
+  layout (
+    title = " Calories v Carbs v Protein",
+    xaxis = list(title = "Calories"),
+    yaxis = list(title = "Carbs (g)"),
+    zaxis = list(title = "Protein (g")  
+    )
+
+
+
+```
+
+
+
+## Showcasing plots {.tabset}
+
+### Figure 1
+
+```{r echo=FALSE}
+p1_scatter
+```
+
+### Figure 2
+
+```{r echo=FALSE}
+p2_scatter
+```
+
+
+
+
