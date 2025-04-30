@@ -11,65 +11,98 @@ output:
 knitr::opts_chunk$set(echo=FALSE, warning = FALSE, message=FALSE)
 ```
 
+## Introduction
 
-This is my JSC370 Final Project website.
+### Background
 
-```{r echo=FALSE}
+The software engineering job market has experienced significant volatility in recent years. According to the Federal Reserve of St. Louis (FRED), software engineering job postings saw exponential growth after February 2020, peaking in early 2022 with an index value of 240 (baseline Feb 2020 = 100). However, this trend reversed dramatically by late 2023, coinciding with widespread tech industry layoffs.
 
-source("process_starbucks_data.R")
-```
+This project analyzes the changing landscape of the software engineering job market by comparing data from 2021 and 2023, providing insights into the shifts in available roles, geographic distribution, and required skills.
+
+### Research Questions
+
+This analysis focuses on two primary questions:
+
+1. What are the key differences between software engineering job postings in 2021 and 2023?
+2. Can we use job posting metadata to predict software engineering salaries?
+
+## Methodology
+
+### Data Sources
+
+This analysis uses three primary datasets:
+
+1. **2021 Dataset**: Collected by Mike Lawrence, containing 8,261 job postings scraped from LinkedIn in October 2021.
+2. **2023 Dataset**: Compiled by Yazeed Fares, containing 9,380 job postings scraped from LinkedIn in December 2023.
+
+### Data Processing
+
+The analysis workflow includes:
+
+1. **Data Cleaning**: Standardizing variable names across datasets, handling missing values, and creating consistent categories for job titles and seniority levels.
+
+2. **Text Analysis**: 
+   - Chunking job descriptions for more effective processing
+   - Identifying key skills through regex pattern matching against a database of ~300 software engineering skills
+   - Extracting years of experience requirements from job descriptions
+   - Performing sentiment analysis on job descriptions using the syuzhet library
+
+3. **Geographic Analysis**: 
+   - Geocoding job locations
+   - Mapping job distribution across regions
+
+4. **Salary Prediction Models**:
+   - Multiple Linear Regression (MLR)
+   - Generalized Linear Mixed Models (GLMM)
+   - Bagging (Bootstrap Aggregating)
+   - XGBoost (Extreme Gradient Boosting)
+
+### Visualization Approach
+
+The findings are presented through various visualization techniques including:
+
+- Bar charts for categorical comparisons
+- Geographic maps for spatial distribution
+- Word clouds for text analysis
+
+## Key Findings
+
+### Job Market Trends
+
+#### Role Distribution
+Software Engineer was the most popular role in both 2021 and 2023. However, there was a notable difference in role specificity between the two years. The 2021 dataset showed over 1,000 occurrences of specialized roles such as Machine Learning Engineer, Site Reliability Engineer, and Data Scientist. In contrast, the 2023 dataset showed less specialization, with Embedded Systems Engineer being the second most common role with only about 700 postings.
+
+#### Company Distribution
+The companies posting job openings changed significantly between 2021 and 2023:
+
+- **2021**: Traditional tech giants dominated the job market, with Apple posting approximately 600 openings, followed by Microsoft, Uber, and Salesforce (each with ~100 postings).
+  
+- **2023**: There was a noticeable shift away from tech giants. The highest number of postings came from "Jobs for Humanity" - a platform connecting underrepresented talent with employers. Other major posters included defense contractors like Northrop Grumman and recruiting agencies.
+
+This shift aligns with industry trends, as according to Layoffs.fyi, 1,036 tech companies laid off 238,397 employees in the first nine months of 2023 alone.
+
+#### Geographic Distribution
+Job opportunities showed distinct geographic patterns in both years, with certain regions experiencing significant changes in job availability.
+
+### Salary Prediction Results
+
+Among the models evaluated for salary prediction:
+
+- **XGBoost** achieved the lowest test RMSE (20,234.582)
+- **Bagging model** performed second best (21,668.756)
+- **Multiple Linear Regression** and **GLMM** showed higher error rates (25,330.525 and 25,421.682 respectively)
+
+The variable importance analysis revealed that:
+
+1. **Geographic location** (State) was the most influential predictor of salary
+2. **Sentiment** derived from job descriptions ranked second in importance
+3. **Role** and **Seniority** also contributed meaningfully
+4. **Years of Experience** had the lowest relative importance among the predictors
 
 
-```{r p1_scatter}
+## Conclusion
 
-p1_scatter <- sb_nutr %>% 
-  plot_ly(x = ~Calories, y = ~ `Carb. (g)`, type = "scatter", mode = 'markers', color = ~Category)
+The software engineering job market underwent significant changes between 2021 and 2023. The analysis reveals a shift from specialized roles at major tech companies to more general positions across diverse industries. This transformation coincides with the widespread tech layoffs reported in 2023.
 
-```
-
-```{r p2-scatter}
-
-
-p2_scatter <- sb_nutr %>% 
-  unnest_tokens(word, Item, token="words") %>% 
-  filter(word %in% topwords$word) %>% 
-  plot_ly(
-    x = ~Calories,
-    y = ~ `Carb. (g)`, 
-    z = ~ `Protein (g)`,
-    type = "scatter3d", 
-    mode = 'markers', 
-    color = ~word,
-    marker = list(size = 5)
-
-  ) %>% 
-  layout (
-    title = " Calories v Carbs v Protein",
-    xaxis = list(title = "Calories"),
-    yaxis = list(title = "Carbs (g)"),
-    zaxis = list(title = "Protein (g")  
-    )
-
-
-
-```
-
-
-
-## Showcasing plots {.tabset}
-
-### Figure 1
-
-```{r echo=FALSE}
-p1_scatter
-```
-
-### Figure 2
-
-```{r echo=FALSE}
-p2_scatter
-```
-
-
-
+For salary prediction, ensemble methods like XGBoost and Bagging outperformed traditional regression approaches, highlighting the complex relationships between job characteristics and compensation. Geographic location and job description sentiment emerged as surprisingly strong predictors of salary levels.
 

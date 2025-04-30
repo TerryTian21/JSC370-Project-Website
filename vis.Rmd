@@ -1,0 +1,139 @@
+---
+title: Visualizations
+output:
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning = FALSE, message=FALSE)
+```
+
+```{r load-libraries}
+# Data manipulation and utilities
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(data.table)
+
+# Visualization
+library(ggplot2)
+library(wordcloud2)
+library(RColorBrewer)
+
+```
+
+
+## Job Postings Analysis {.tabset}
+
+```{r load-postings}
+source("postings.R")
+```
+
+### Seniority Distribution
+
+The chart below shows the distribution of job postings by seniority level. Hover over the bars to see detailed counts and percentages.
+
+```{r seniority-plot, fig.cap="Figure 1: Distribution of job postings by seniority level in 2023"}
+# Load 2023 data
+data_2023 <- load_postings_data(2023)
+
+# Create seniority distribution plot
+plot_seniority_distribution(data_2023)
+```
+
+**Summary**: This bar chart illustrates the distribution of software engineering job postings across different seniority levels in 2023. The data reveals that Senior positions dominate the job market, followed by Mid-level roles. Entry-level positions are less common, suggesting a higher demand for experienced professionals in the software engineering field. Many job postings do not specify a seniority level, which could indicate flexibility in hiring requirements.
+
+### Role Distribution
+
+This pie chart displays the top 10 job roles in the dataset. The size of each slice represents the proportion of job postings for that role.
+
+```{r role-plot, fig.cap="Figure 2: Distribution of top 10 job roles in 2023"}
+# Create role distribution plot
+plot_role_distribution(data_2023)
+```
+
+**Summary**: The pie chart above shows the distribution of the top 10 job roles in software engineering for 2023. Software Engineer positions represent the largest segment, indicating they are the most commonly advertised role. Full Stack Engineers and Data Engineers also make up significant portions of the job market. This visualization helps identify which specialized roles are most in demand, providing valuable insights for job seekers and educational institutions focusing on tech career preparation.
+
+### Seniority Comparison (2021 vs 2023)
+
+Compare how the distribution of seniority levels has changed from 2021 to 2023.
+
+```{r seniority-comparison, fig.cap="Figure 3: Comparison of seniority level distributions between 2021 and 2023"}
+# Create seniority comparison plot
+plot_seniority_comparison()
+```
+
+**Summary**: This grouped bar chart compares the distribution of seniority levels between 2021 and 2023. The visualization reveals shifts in hiring patterns over this two-year period. Notable changes include an increase/decrease in Senior-level positions and variations in Entry-level job availability. These trends may reflect evolving industry needs, economic conditions, or changes in the software engineering talent pipeline.
+
+
+
+## Geographic Distribution of Job Postings {.tabset}
+
+The map below shows the distribution of software engineering job postings across the United States in 2021. The size and color intensity of each circle represents the number of job postings in that state. Hover over the circles to see the exact count.
+
+```{r load-geo-data}
+source("geo.R")
+```
+
+### 2021 Job Locations 
+
+```{r map, fig.cap="Figure 4: Geographic distribution of software engineering job postings across the United States in 2021"}
+# Load 2021 location data and create interactive map
+data_2021 <- load_location_data(2021)
+create_interactive_map(data_2021, "Interactive Map of Job Postings - 2021")
+```
+
+**Summary**: This interactive map visualizes the geographic distribution of software engineering job postings across the United States in 2021. The size and color intensity of each circle represent the number of job postings in that state. California, Texas, and New York show the highest concentration of job opportunities, reflecting the major tech hubs in these states. The visualization highlights the coastal dominance in tech employment, with fewer opportunities in the central states.
+
+### 2023 Job Locations 
+
+```{r map-combined, fig.cap="Figure 5: Geographic distribution of software engineering job postings across the United States in 2023"}
+# Load 2023 location data
+data_2023 <- load_location_data(2023)
+
+# Create interactive map for 2023
+create_interactive_map(data_2023, "Interactive Map of Job Postings - 2023")
+```
+
+**Summary**: The 2023 interactive map shows how software engineering job opportunities are distributed across the United States. Compared to 2021, there are notable shifts in the concentration of job postings. While traditional tech hubs like California remain dominant, we can observe growth in emerging tech centers such as Texas, North Carolina, and Georgia.
+
+## Wordcloud Visualizations {.tabset}
+
+```{r load-skills, cache=TRUE}
+source("skills.R")
+```
+
+
+The following wordcloud shows the most frequent noun phrases found in software engineering job descriptions from 2021. The size of each phrase represents its frequency in the dataset.
+
+
+### 2021 Top Skills
+
+```{r wordcloud-2021, fig.cap="Figure 6: Word cloud of the most frequent skills mentioned in software engineering job descriptions in 2021"}
+# Create wordcloud for 2021 data
+wordcloud2(
+  data = skill_counts_2021,
+  size = 0.6,
+  color = "random-light",
+  backgroundColor = "black"
+)
+```
+
+**Summary**: This word cloud visualizes the most frequently mentioned skills in software engineering job descriptions from 2021. The size of each term represents its frequency in the dataset. Programming languages like Python, JavaScript, and Java appear prominently, along with frameworks and technologies such as React, AWS, and Docker. The visualization highlights the technical skills that were most in demand in 2021.
+
+### 2023 Top Skills
+
+```{r wordcloud-2023, fig.cap="Figure 7: Word cloud of the most frequent skills mentioned in software engineering job descriptions in 2023"}
+# Create wordcloud for 2023 data
+wordcloud2(
+  data = skill_counts_2023,
+  size = 0.6,
+  color = "random-light",
+  backgroundColor = "black"
+)
+```
+
+**Summary**: The 2023 word cloud illustrates the evolution of in-demand skills for software engineering positions. Compared to 2021, we can observe shifts in the prominence of certain technologies and frameworks. Cloud technologies, AI/ML-related skills, and DevOps practices have gained more importance.
+
