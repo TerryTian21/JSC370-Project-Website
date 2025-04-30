@@ -1,17 +1,18 @@
 name: "JSC Final Project"
 output_dir: "."
 navbar:
-  title: "JSC370 Final Project"
-  left:
-    - text: "Home"
-      href: index.html
-    - text: "Visualizations"
-      href: vis.html
-  right:
-
-    - text: "Github Repo"
-      href: https://github.com/TerryTian21/JSC370-Final-Project/tree/main
+    title: "JSC370 Final Project"
+    left:
+        - text: "Home"
+          href: index.html
+        - text: "Visualizations"
+          href: vis.html
+        - text: "Download Report"
+          href: JSC370%20Final%20Project.pdf
+    right:
+        - text: "Github Repo"
+          href: https://github.com/TerryTian21/JSC370-Final-Project/tree/main
 output:
-  html_document:
-    theme: cosmo
-    css: styles.css
+    html_document:
+        theme: cosmo
+        css: styles.css
