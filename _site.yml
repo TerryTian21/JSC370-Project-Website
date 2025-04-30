@@ -10,7 +10,7 @@ navbar:
   right:
 
     - text: "Github Repo"
-      href: https://jsc370.github.io/JSC370-2025/
+      href: https://github.com/TerryTian21/JSC370-Final-Project/tree/main
 output:
   html_document:
     theme: cosmo
